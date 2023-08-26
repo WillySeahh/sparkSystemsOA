@@ -17,6 +17,10 @@ public class MainTest {
     @Test
     public void testGetBestAskOrBid() {
 
+        /**
+         * Input as testInput1, testing if we can get the correct highest bid and lowest ask.
+         */
+
         FXSystem fxSystem = new FXSystem();
         fxSystem.handleInput(System.getProperty("user.dir") + "/src/test" + "/testInput1.csv");
 

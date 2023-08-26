@@ -17,14 +17,16 @@ public class FXSystem {
         LocalDateTime now = LocalDateTime.now();
         BigInteger currTime = new BigInteger(dtf.format(now));
 
-        return symbolToOrderBook.get(symbol).printBidAskSpreadWithinTimeFrame(currTime, age);
-
+        if (symbolToOrderBook.containsKey(symbol)) {
+            return symbolToOrderBook.get(symbol).printBidAskSpreadWithinTimeFrame(currTime, age);
+        } else {
+            return "Symbol: " + symbol + " has no ASKS or BIDS associated with it.";
+        }
     }
 
 
     public void handleInput(String path) {
 
-        //TODO explain why buffered reader is fasteest
         BufferedReader br = null;
 
         try {
@@ -52,7 +54,6 @@ public class FXSystem {
                     bidPrice = Double.parseDouble(st[3]);
                     askPrice = Double.parseDouble(st[4]);
                 } catch (Exception e) {
-                    //TODO explain why dont let 1 malformed input break system
                     System.out.println("Error parsing this input line" + line);
                     line = br.readLine();
                     continue;
@@ -82,4 +83,26 @@ public class FXSystem {
             e.printStackTrace();
         }
     }
+
+    public String printEntireOrderBook(String symbol) {
+        if (symbolToOrderBook.containsKey(symbol)) {
+            String result = "Symbol: " + symbol + " entire Orderbook. \n";
+            result += symbolToOrderBook.get(symbol).printEntireOrderBook();
+            return result;
+        } else {
+            return "Symbol: " + symbol + " has no ASKS or BIDS associated with it.";
+        }
+    }
+
+    public String printEntireOrderBook(String symbol, BigInteger age) {
+        if (symbolToOrderBook.containsKey(symbol)) {
+            String result = "Symbol: " + symbol + " entire Orderbook. \n";
+            result += symbolToOrderBook.get(symbol).printEntireOrderBook(age);
+            return result;
+        } else {
+            return "Symbol: " + symbol + " has no ASKS or BIDS associated with it.";
+        }
+    }
+
+
 }

@@ -3,6 +3,8 @@ package main;
 import javafx.util.Pair;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 public class OrderBook {
@@ -23,7 +25,7 @@ public class OrderBook {
         OrderMetaData lowestAskMetaData = this.asks.ask.get(lowestAsk);
 
         Double highestBid = this.bids.bid.lastEntry().getKey();
-        OrderMetaData highestBidMetaData = this.bids.bid.lastEntry().getValue();
+        OrderMetaData highestBidMetaData = this.bids.bid.get(highestBid);
 
         return printToStringFunc(lowestAskMetaData, highestBidMetaData);
     }
@@ -55,7 +57,6 @@ public class OrderBook {
                 break;
             }
         }
-
 
         return printToStringFunc(lowestAskMetaData, highestBidMetaData);
     }
@@ -102,7 +103,7 @@ public class OrderBook {
 
 
 
-        public String printBidAskSpreadWithinTimeFrame(BigInteger currTime, BigInteger age) {
+    public String printBidAskSpreadWithinTimeFrame(BigInteger currTime, BigInteger age) {
         if (age.compareTo(BigInteger.ZERO) == 0) {
             //no specific time frame, get best bid and ask price since beginning
             return printBidAskSpread();
@@ -138,4 +139,62 @@ public class OrderBook {
 
         return result;
     }
+
+
+    public String printEntireOrderBook() {
+        StringBuilder result = new StringBuilder();
+
+        result.append("------------------------------------\n");
+
+        for (Double key : asks.ask.descendingKeySet()) {
+            result.append(asks.ask.get(key).toString(true));
+            result.append('\n');
+        }
+
+        result.append("\n");
+        result.append("-----------BID ASK SPREAD---------------\n");
+        result.append("\n");
+
+        for (Double key : bids.bid.descendingKeySet()) {
+            result.append(bids.bid.get(key).toString(false));
+            result.append('\n');
+        }
+
+        return result.toString();
+    }
+
+    public String printEntireOrderBook(BigInteger age) {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYYMMddHHmmssSSS");
+        LocalDateTime now = LocalDateTime.now();
+        BigInteger currTime = new BigInteger(dtf.format(now));
+
+        StringBuilder result = new StringBuilder();
+
+        result.append("------------------------------------\n");
+
+        for (Double key : asks.ask.descendingKeySet()) {
+            if ((currTime.subtract(this.asks.ask.get(key).timestamp)).abs().compareTo(age) <= 0) {
+                //fits this time criteria
+                result.append(asks.ask.get(key).toString(true));
+                result.append('\n');
+            }
+        }
+
+        result.append("\n");
+        result.append("-----------BID ASK SPREAD---------------\n");
+        result.append("\n");
+
+        for (Double key : bids.bid.descendingKeySet()) {
+            if ((currTime.subtract(this.bids.bid.get(key).timestamp)).abs().compareTo(age) <= 0) {
+                //fits this time criteria
+                result.append(bids.bid.get(key).toString(false));
+                result.append('\n');
+            }
+        }
+
+        return result.toString();
+    }
+
+
 }

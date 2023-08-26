@@ -15,4 +15,13 @@ public class OrderMetaData {
         this.bidPrice = bidPrice;
         this.askPrice = askPrice;
     }
+
+
+    public String toString(Boolean ask) {
+        if (ask) {
+            return String.format("Source: %s, Timestamp: %s, AskPrice: %f", source, timestamp, askPrice);
+        } else {
+            return String.format("Source: %s, Timestamp: %s, BidPrice: %f", source, timestamp, bidPrice);
+        }
+    }
 }

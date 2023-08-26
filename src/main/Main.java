@@ -13,11 +13,14 @@ public class Main {
         fxSystem.handleInput(System.getProperty("user.dir") + "/src" + "/input.csv");
 
         fxSystem.symbolToOrderBook.forEach(
-                ((s, orderBook) -> System.out.println(orderBook.printBidAskSpread()))
+                ((s, orderBook) -> System.out.println(fxSystem.queryBidAskSpread("EURUSD", BigInteger.ZERO)))
         );
 
-        System.out.println(fxSystem.queryBidAskSpread("EURUSD", new BigInteger("100000000000")));
+        System.out.println(fxSystem.queryBidAskSpread("SGD", new BigInteger("100000000000")));
+
+
+        System.out.println(fxSystem.printEntireOrderBook("EURUSD"));
+        System.out.println(fxSystem.printEntireOrderBook("EURUSD", new BigInteger("1000000000")));
 
     }
-
 }
