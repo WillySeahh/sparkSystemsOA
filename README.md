@@ -159,9 +159,9 @@ Take note it is ordered from highest ask to lowest ask, and highest bid to lowes
 
 ## Project build files
 1. `git clone https://github.com/WillySeahh/sparkSystemsOA.git`
-2. Install the necessary libraries and dependencies
+2. Open project using IntellJ
+3. Install the necessary dependencies such as Junit, jupiter
    
-
 
 ## Additional Enhancements
 
