@@ -86,9 +86,13 @@ Firstly:
 
 This only gives the best bid and ask price, either 0 or 1 of asks or bids are returned. 
 ```
-FXSystem.queryBidAskSpread(String symbol, BigInteger age)
+FXSystem.queryBestBidAsk(String symbol, BigInteger age)
 ```
-If age is passed in as 0, I will return the best bid and ask among *all* inputs
+or
+```
+FXSystem.queryBestBidAsk(String symbol)
+```
+Overloaded function: if there is no age passed in, then it will return the best since the first order entry. 
 
 If age is passed in as > 0, I will return the best bid and ask among *all* inputs
 that satisfies this criteria
@@ -118,6 +122,9 @@ or
 Symbol: SGDMYR has no ASKS or BIDS associated with it.
 ```
 
+<br>
+<br>
+
 Secondly:
 
 This prints the entire orderbook in order
@@ -133,20 +140,29 @@ FxSystem.printEntireOrderBook("EURUSD", new BigInteger("100))
 
 
 Sample outputs
-```aidl
+```
 Symbol: EURUSD entire Orderbook. 
 ------------------------------------
+Source: reuters, Timestamp: 20230826093124345, AskPrice: 1.412000
+Source: citi, Timestamp: 20230826093124345, AskPrice: 1.409000
 Source: reuters, Timestamp: 20230516093124345, AskPrice: 1.312000
 Source: citi, Timestamp: 20230516093124342, AskPrice: 1.309000
 
 -----------BID ASK SPREAD---------------
 
+Source: citi, Timestamp: 20230826093124345, BidPrice: 1.403000
+Source: reuters, Timestamp: 20230826093124345, BidPrice: 1.402000
 Source: citi, Timestamp: 20230516093124342, BidPrice: 1.301000
 Source: reuters, Timestamp: 20230516093124345, BidPrice: 1.300000
 ```
+Take note it is ordered from highest ask to lowest ask, and highest bid to lowest bid. 
 
-
+## Project build files
+1. `git clone https://github.com/WillySeahh/sparkSystemsOA.git`
+2. Install the necessary libraries and dependencies
    
+
+
 ## Additional Enhancements
 
 Let us try to see how we can enhancement to accommodate the additional filters:
@@ -177,4 +193,9 @@ This can be handled by creating another map that handles this, we should not pol
 design to achieve this purpose as this is probably for viewing purposes / not on hot path / critical path.
 ```
 
+5. Potential for arbitrage
+```
+When the best ask is lower than best bid, we could take advantage of arbitrage and profit the difference. 
+Could send an alert to inform the trader. 
+```
 
