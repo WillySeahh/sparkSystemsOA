@@ -18,7 +18,6 @@ public class Main {
 
         System.out.println(fxSystem.queryBestBidAsk("SGD", new BigInteger("100000000000")));
 
-
         System.out.println(fxSystem.printEntireOrderBook("EURUSD"));
         System.out.println(fxSystem.printEntireOrderBook("EURUSD", new BigInteger("1000000000")));
 
