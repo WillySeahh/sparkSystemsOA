@@ -1,11 +1,8 @@
 package main;
 
 import java.math.BigInteger;
-import java.util.*;
 
 public class Main {
-
-    private static HashMap<String, OrderBook> symbolToOrderBook = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -13,10 +10,14 @@ public class Main {
         fxSystem.handleInput(System.getProperty("user.dir") + "/src" + "/input.csv");
 
         fxSystem.symbolToOrderBook.forEach(
-                ((s, orderBook) -> System.out.println(fxSystem.queryBidAskSpread("EURUSD", BigInteger.ZERO)))
+                ((s, orderBook) -> System.out.println(fxSystem.queryBestBidAsk("EURUSD", new BigInteger("10000000"))))
         );
 
-        System.out.println(fxSystem.queryBidAskSpread("SGD", new BigInteger("100000000000")));
+        fxSystem.symbolToOrderBook.forEach(
+                ((s, orderBook) -> System.out.println(fxSystem.queryBestBidAsk("EURUSD")))
+        );
+
+        System.out.println(fxSystem.queryBestBidAsk("SGD", new BigInteger("100000000000")));
 
 
         System.out.println(fxSystem.printEntireOrderBook("EURUSD"));

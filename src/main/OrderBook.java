@@ -19,8 +19,8 @@ public class OrderBook {
         bids = new Bids();
     }
 
-    public String printBidAskSpread() {
-
+    public String queryBestBidAsk() {
+         // There are no delete order, so if symbol has orderbook, there must be at least an order. Will not throw NPE here
         Double lowestAsk = this.asks.ask.firstEntry().getKey();
         OrderMetaData lowestAskMetaData = this.asks.ask.get(lowestAsk);
 
@@ -30,8 +30,8 @@ public class OrderBook {
         return printToStringFunc(lowestAskMetaData, highestBidMetaData);
     }
 
-    public String printBidAskSpread(BigInteger currTime, BigInteger age) {
-
+    public String queryBestBidAsk(BigInteger currTime, BigInteger age) {
+        // There are no delete order, so if symbol has orderbook, there must be at least an order. Will not throw NPE here
         Double lowestAsk = null;
         OrderMetaData lowestAskMetaData = null;
 
@@ -62,6 +62,7 @@ public class OrderBook {
     }
 
     public Pair<OrderMetaData, OrderMetaData> getBidAskSpread() {
+        // There are no delete order, so if symbol has orderbook, there must be at least an order. Will not throw NPE here
         Double lowestAsk = this.asks.ask.firstEntry().getKey();
         OrderMetaData lowestAskMetaData = this.asks.ask.get(lowestAsk);
 
@@ -72,6 +73,8 @@ public class OrderBook {
     }
 
     public Pair<OrderMetaData, OrderMetaData> getBidAskSpread(BigInteger currTime, BigInteger age) {
+        // There are no delete order, so if symbol has orderbook, there must be at least an order. Will not throw NPE here
+
         Double lowestAsk = null;
         OrderMetaData lowestAskMetaData = null;
 
@@ -103,14 +106,6 @@ public class OrderBook {
 
 
 
-    public String printBidAskSpreadWithinTimeFrame(BigInteger currTime, BigInteger age) {
-        if (age.compareTo(BigInteger.ZERO) == 0) {
-            //no specific time frame, get best bid and ask price since beginning
-            return printBidAskSpread();
-        } else {
-            return printBidAskSpread(currTime, age);
-        }
-    }
 
     public String printToStringFunc(OrderMetaData ask, OrderMetaData bid) {
         String result = "Bid Ask Spread for symbol: " + this.symbol + '\n';

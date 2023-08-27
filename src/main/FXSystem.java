@@ -1,5 +1,7 @@
 package main;
 
+import javafx.util.Pair;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.math.BigInteger;
@@ -11,16 +13,62 @@ public class FXSystem {
 
     public HashMap<String, OrderBook> symbolToOrderBook = new HashMap<>();
 
-    public String queryBidAskSpread(String symbol, BigInteger age) {
+    /**
+     * Query the best bid and best ask and print them out.
+     * It prints only the lowest ask and highest bid.
+     * @param symbol
+     * @param age
+     * @return
+     */
+    public String queryBestBidAsk(String symbol, BigInteger age) {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYYMMddHHmmssSSS");
         LocalDateTime now = LocalDateTime.now();
         BigInteger currTime = new BigInteger(dtf.format(now));
 
         if (symbolToOrderBook.containsKey(symbol)) {
-            return symbolToOrderBook.get(symbol).printBidAskSpreadWithinTimeFrame(currTime, age);
+            return symbolToOrderBook.get(symbol).queryBestBidAsk(currTime, age);
         } else {
             return "Symbol: " + symbol + " has no ASKS or BIDS associated with it.";
+        }
+    }
+
+    /**
+     * Query the best bid and best ask and print them out.
+     * It prints only the lowest ask and highest bid.
+     * @param symbol
+     * No age, so it will search through the entire orderbook
+     * @return
+     */
+    public String queryBestBidAsk(String symbol) {
+
+        if (symbolToOrderBook.containsKey(symbol)) {
+            return symbolToOrderBook.get(symbol).queryBestBidAsk();
+        } else {
+            return "Symbol: " + symbol + " has no ASKS or BIDS associated with it.";
+        }
+    }
+
+
+    public Pair<OrderMetaData, OrderMetaData> getBidAskSpread(String symbol, BigInteger age) {
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYYMMddHHmmssSSS");
+        LocalDateTime now = LocalDateTime.now();
+        BigInteger currTime = new BigInteger(dtf.format(now));
+
+        if (symbolToOrderBook.containsKey(symbol)) {
+            return symbolToOrderBook.get(symbol).getBidAskSpread(currTime, age);
+        } else {
+            return new Pair<>(null, null);
+        }
+    }
+
+    public Pair<OrderMetaData, OrderMetaData> getBidAskSpread(String symbol) {
+
+        if (symbolToOrderBook.containsKey(symbol)) {
+            return symbolToOrderBook.get(symbol).getBidAskSpread();
+        } else {
+            return new Pair<>(null, null);
         }
     }
 
@@ -36,7 +84,6 @@ public class FXSystem {
 
             while (line != null) {
                 String[] st = line.split(",");
-                //StringTokenizer st = new StringTokenizer(line,","); //String tokenizer is faster
 
                 if (st.length != 5) {
                     System.out.printf("Invalid input, expect 5 tokens. This only has %s tokens. Malformed input is: %s%n", st.length, line);
@@ -54,7 +101,7 @@ public class FXSystem {
                     bidPrice = Double.parseDouble(st[3]);
                     askPrice = Double.parseDouble(st[4]);
                 } catch (Exception e) {
-                    System.out.println("Error parsing this input line" + line);
+                    System.out.println("Error parsing this input line: " + line);
                     line = br.readLine();
                     continue;
                 }
@@ -79,8 +126,7 @@ public class FXSystem {
             }
             br.close();
         } catch (Exception e) {
-            System.out.println("Error while opening file for input. Need to throw error and terminate" + e);
-            e.printStackTrace();
+            System.out.println("Error while opening file for input. Need to throw error and terminate. " + e);
         }
     }
 
